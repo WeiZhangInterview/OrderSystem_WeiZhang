@@ -8,7 +8,7 @@ import(
 )
 
 func Test() string {
-        cnn, err := sql.Open("mysql", "order_system:wei_zhangr@tcp(db:3306)/order_system")
+        cnn, err := sql.Open("mysql", "order_system:wei_zhang@tcp(db:3306)/order_system")
         if err != nil {
                 log.Fatal(err)
         }
