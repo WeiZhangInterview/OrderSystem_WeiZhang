@@ -2,7 +2,7 @@ package order
 
 import (
 	"strconv"
-	"github.com/Order_system/db"
+	"github.com/OrderSystem_WeiZhang/db"
 	"github.com/gin-gonic/gin"
 )
 /*
