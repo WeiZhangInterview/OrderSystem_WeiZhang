@@ -36,7 +36,7 @@ func PatchOrders(c *gin.Context) {
 }
 
 func GetOrders(c *gin.Context) {
-	order := db.test()
+	order := db.Test()
 	c.JSON(200, map[string]string{"success": order})
 }
 
