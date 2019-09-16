@@ -2,7 +2,7 @@ package order
 
 import (
 	"strconv"
-
+	"github.com/Order_system/db/db"
 	"github.com/gin-gonic/gin"
 )
 /*
@@ -36,7 +36,8 @@ func PatchOrders(c *gin.Context) {
 }
 
 func GetOrders(c *gin.Context) {
-	c.JSON(200, map[string]bool{"success": true})
+	order := db.test()
+	c.JSON(200, map[string]string{"success": order})
 }
 
 
