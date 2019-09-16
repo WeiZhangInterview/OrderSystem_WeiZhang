@@ -16,7 +16,7 @@ func test() string {
         id := 1
         var lat string
 
-        if err := cnn.QueryRow("SELECT origin_lat FROM orders WHERE id = ? LIMIT 1", id).Scan(&name); err != nil {
+        if err := cnn.QueryRow("SELECT origin_lat FROM orders WHERE id = ? LIMIT 1", id).Scan(&lat); err != nil {
                 log.Fatal(err)
         }
 
