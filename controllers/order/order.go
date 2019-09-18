@@ -1,6 +1,7 @@
 package order
 
 import (
+	"fmt"
 	"log"
 	"strconv"
 	"github.com/gin-gonic/gin"
@@ -28,6 +29,15 @@ func PostOrders(c *gin.Context) {
 		c.JSON(400, resultErr)
 		return			
 	}
+
+	lastInsertId, errInsert := orderRequest.Add("test")
+	fmt.Println(lastInsertId)
+	if errInsert != nil ||lastInsertId == 0{
+		log.Fatal(err.Error())
+		resultErr.Error = "ERR_SAVING"
+		c.JSON(409, resultErr)
+		return			
+	} 
 
 	c.JSON(200, map[string]bool{"success": true})
 	return
