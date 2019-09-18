@@ -18,4 +18,3 @@ func AllowAllOrigins() gin.HandlerFunc {
 		c.Next()
 	}
 }
-

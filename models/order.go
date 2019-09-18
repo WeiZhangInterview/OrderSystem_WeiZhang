@@ -4,6 +4,7 @@ package model
 
 import (
 	"log"
+
 	db "github.com/OrderSystem_WeiZhang/db"
 )
 
@@ -17,8 +18,9 @@ type OrderRespond struct {
 	Distance string `json:"distance"`
 	Status   string `json:"status"`
 }
-func (o *OrderRequest) Add( distance string) (id int64, err error){
-	rs, err := db.CONN.Exec("INSERT INTO `orders`(`origin_lat`,`origin_long`,`destination_lat`,`destination_long`,`distance`)VALUES(?,?,?,?,?);", o.Origin[0], o.Origin[1],o.Destination[0],o.Destination[1],distance)
+
+func (o *OrderRequest) Add(distance string) (id int64, err error) {
+	rs, err := db.CONN.Exec("INSERT INTO `orders`(`origin_lat`,`origin_long`,`destination_lat`,`destination_long`,`distance`)VALUES(?,?,?,?,?);", o.Origin[0], o.Origin[1], o.Destination[0], o.Destination[1], distance)
 	if err != nil {
 		return
 	}
@@ -57,7 +59,7 @@ func (o *OrderRespond) Update() (num int64, err error) {
 		return
 	}
 
-	rs,err := tx.Exec("Update orders Set `status` = 'TAKEN' WHERE id = ?", o.Id)
+	rs, err := tx.Exec("Update orders Set `status` = 'TAKEN' WHERE id = ?", o.Id)
 	num, _ = rs.RowsAffected()
 
 	if err != nil {
@@ -77,7 +79,6 @@ func (o *OrderRespond) Update() (num int64, err error) {
 		}
 	}
 
-
-	return 
+	return
 
 }

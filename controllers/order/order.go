@@ -4,12 +4,11 @@ import (
 	"fmt"
 	"log"
 	"strconv"
+
+	"github.com/OrderSystem_WeiZhang/models"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
-	"github.com/OrderSystem_WeiZhang/models"
 )
-
-
 
 func PostOrders(c *gin.Context) {
 	var resultErr model.ResultErr
@@ -19,7 +18,7 @@ func PostOrders(c *gin.Context) {
 		log.Fatal(errBinding.Error())
 		resultErr.Error = "ERR_INPUT"
 		c.JSON(400, resultErr)
-		return	
+		return
 	}
 
 	err := validateCoordinateInput(orderRequest)
@@ -27,17 +26,17 @@ func PostOrders(c *gin.Context) {
 		log.Fatal(err.Error())
 		resultErr.Error = "ERR_INPUT"
 		c.JSON(400, resultErr)
-		return			
+		return
 	}
 
 	lastInsertId, errInsert := orderRequest.Add("test")
 	fmt.Println(lastInsertId)
-	if errInsert != nil ||lastInsertId == 0{
+	if errInsert != nil || lastInsertId == 0 {
 		log.Fatal(err.Error())
 		resultErr.Error = "ERR_SAVING"
 		c.JSON(409, resultErr)
-		return			
-	} 
+		return
+	}
 
 	c.JSON(200, map[string]bool{"success": true})
 	return
@@ -51,20 +50,20 @@ func PatchOrders(c *gin.Context) {
 	if errParse != nil {
 		resultErr.Error = "ERR_PARAMETER"
 		c.JSON(400, resultErr)
-		return	
+		return
 	}
 
 	//Check Order Id with Row
 	var order model.OrderRespond
 	order.Id = orderId
-	effectRow , errTx := order.Update()
+	effectRow, errTx := order.Update()
 	if errTx != nil || effectRow != 1 {
 		resultErr.Error = "ERR_ORDER_BE_TAKEN"
 		c.JSON(409, resultErr)
-		return			
+		return
 	}
 
-	c.JSON(200, map[string]string{"status":"SUCCESS"})
+	c.JSON(200, map[string]string{"status": "SUCCESS"})
 }
 
 func GetOrders(c *gin.Context) {
@@ -80,7 +79,7 @@ func GetOrders(c *gin.Context) {
 		if err != nil || page <= 0 {
 			resultErr.Error = "ERR_PARAMETER"
 			c.JSON(400, resultErr)
-			return		
+			return
 		}
 	}
 	if c.Request.URL.Query()["limit"] != nil {
@@ -88,7 +87,7 @@ func GetOrders(c *gin.Context) {
 		if err != nil || limit <= 0 {
 			resultErr.Error = "ERR_PARAMETER"
 			c.JSON(400, resultErr)
-			return		
+			return
 		}
 	}
 
@@ -100,22 +99,19 @@ func GetOrders(c *gin.Context) {
 		log.Println(err)
 		resultErr.Error = "ERR_DATA"
 		c.JSON(400, resultErr)
-		return		
+		return
 	}
 
-
 	//Get Slice lenght and return page count part of slice
-	if len(orders) > (page -1) * limit {
-		if len(orders) > page * limit {
-			returnOrders = orders[(page-1) * limit : page * limit]
-			}else {
-				returnOrders = orders[(page-1) * limit:]
-			}
-	}else{
+	if len(orders) > (page-1)*limit {
+		if len(orders) > page*limit {
+			returnOrders = orders[(page-1)*limit : page*limit]
+		} else {
+			returnOrders = orders[(page-1)*limit:]
+		}
+	} else {
 		returnOrders = orders[0:0]
 	}
 
 	c.JSON(200, returnOrders)
 }
-
-

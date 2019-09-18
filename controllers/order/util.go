@@ -7,7 +7,6 @@ import (
 	"github.com/OrderSystem_WeiZhang/models"
 )
 
-
 func validateCoordinate(coordinate []string) (err error) {
 	lat, lon := -200.00, -200.00
 	if len(coordinate) != 2 {
@@ -40,4 +39,3 @@ func validateCoordinateInput(o model.OrderRequest) (err error) {
 	}
 	return
 }
-

@@ -1,5 +1,5 @@
 package model
 
-type  ResultErr struct{
+type ResultErr struct {
 	Error string `json:"error"`
 }
