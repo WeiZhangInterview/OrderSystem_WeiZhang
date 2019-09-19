@@ -55,6 +55,7 @@ func PostOrders(c *gin.Context) {
 
 func PatchOrders(c *gin.Context) {
 	var resultErr model.ResultErr
+	var req model.OrderRespond
 
 	//Get Order Id
 	orderId, errParse := strconv.Atoi(c.Params.ByName("id"))
@@ -64,12 +65,20 @@ func PatchOrders(c *gin.Context) {
 		return
 	}
 
+	errBinding := c.ShouldBindWith(&req, binding.JSON)
+	if errBinding != nil || req.Status != "TAKEN" {
+		log.Println(errBinding.Error())
+		resultErr.Error = "ERR_INPUT"
+		c.JSON(400, resultErr)
+		return
+	}	
+
 	//Check Order Id with Row
 	var order model.OrderRespond
 	order.Id = orderId
 	effectRow, errTx := order.Update()
 	if errTx != nil || effectRow != 1 {
-		resultErr.Error = "ERR_NO_AVLIABLE_ORDER"
+		resultErr.Error = "ERR_NO_AVAILABLE_ORDER"
 		c.JSON(409, resultErr)
 		return
 	}
