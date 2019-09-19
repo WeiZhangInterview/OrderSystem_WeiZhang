@@ -1,13 +1,15 @@
 package order
 
 import (
-	"fmt"
+	//"fmt"
 	"log"
 	"strconv"
 
 	"github.com/OrderSystem_WeiZhang/models"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
+	"github.com/OrderSystem_WeiZhang/util"
+
 )
 
 func PostOrders(c *gin.Context) {
@@ -29,8 +31,16 @@ func PostOrders(c *gin.Context) {
 		return
 	}
 
-	lastInsertId, errInsert := orderRequest.Add("test")
-	fmt.Println(lastInsertId)
+	distance, errGoogleMap := util.GetDistance(orderRequest.Origin, orderRequest.Destination)
+	if errGoogleMap != nil {
+		log.Fatal(errGoogleMap.Error())
+		resultErr.Error = "ERR_COORDINATE"
+		c.JSON(400, resultErr)
+		return
+	}
+
+	lastInsertId, errInsert := orderRequest.Add(distance)
+	//fmt.Println(lastInsertId)
 	if errInsert != nil || lastInsertId == 0 {
 		log.Fatal(err.Error())
 		resultErr.Error = "ERR_SAVING"
