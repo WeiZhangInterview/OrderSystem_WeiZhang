@@ -15,11 +15,11 @@ func init() {
 	CONN.SetMaxIdleConns(20)
 
 	if err != nil {
-		log.Fatal(err.Error())
+		log.Println(err.Error())
 	}
 	err = CONN.Ping()
 	if err != nil {
-		log.Fatal(err.Error())
+		log.Println(err.Error())
 	}
 
 }

@@ -1,15 +1,13 @@
 package order
 
 import (
-	//"fmt"
 	"log"
 	"strconv"
 
 	"github.com/OrderSystem_WeiZhang/models"
+	"github.com/OrderSystem_WeiZhang/util"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
-	"github.com/OrderSystem_WeiZhang/util"
-
 )
 
 func PostOrders(c *gin.Context) {
@@ -17,32 +15,31 @@ func PostOrders(c *gin.Context) {
 	var orderRequest model.OrderRequest
 	errBinding := c.BindWith(&orderRequest, binding.JSON)
 	if errBinding != nil {
-		log.Fatal(errBinding.Error())
-		resultErr.Error = "ERR_INPUT"
+		log.Println(errBinding.Error())
+		resultErr.Error = "ERR_INPUT_COORDINATE"
 		c.JSON(400, resultErr)
 		return
 	}
 
 	err := validateCoordinateInput(orderRequest)
 	if err != nil {
-		log.Fatal(err.Error())
-		resultErr.Error = "ERR_INPUT"
+		log.Println(err.Error())
+		resultErr.Error = "ERR_INPUT_COORDINATE"
 		c.JSON(400, resultErr)
 		return
 	}
 
 	distance, errGoogleMap := util.GetDistance(orderRequest.Origin, orderRequest.Destination)
-	if errGoogleMap != nil {
-		log.Fatal(errGoogleMap.Error())
-		resultErr.Error = "ERR_COORDINATE"
+	if errGoogleMap != nil || distance == "" {
+		log.Println(errGoogleMap.Error())
+		resultErr.Error = "ERR_CANNOT_GET_DISTANCE"
 		c.JSON(400, resultErr)
 		return
 	}
 
 	lastInsertId, errInsert := orderRequest.Add(distance)
-	//fmt.Println(lastInsertId)
 	if errInsert != nil || lastInsertId == 0 {
-		log.Fatal(err.Error())
+		log.Println(err.Error())
 		resultErr.Error = "ERR_SAVING"
 		c.JSON(409, resultErr)
 		return

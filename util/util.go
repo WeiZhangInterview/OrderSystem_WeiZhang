@@ -23,10 +23,14 @@ func GetDistance(origin []string, destination []string) (distance string, err er
 	}
 
 	resp, err := client.DistanceMatrix(context.Background(), r)
-	if resp.Rows[0].Elements[0].Status != "OK" {
+	if resp.Rows[0].Elements[0].Status == "OK" {
+		distance = resp.Rows[0].Elements[0].Distance.HumanReadable
+
+	} else {
+		distance = ""
 		err = errors.New("cannot find distance")
 	}
-	distance = resp.Rows[0].Elements[0].Distance.HumanReadable
+
 	return
 
 }
