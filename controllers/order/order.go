@@ -44,8 +44,12 @@ func PostOrders(c *gin.Context) {
 		c.JSON(409, resultErr)
 		return
 	}
+	var resp model.OrderRespond
+	resp.Id = int(lastInsertId)
+	resp.Status = "UNASSIGNED"
+	resp.Distance = distance
 
-	c.JSON(200, map[string]bool{"success": true})
+	c.JSON(200, resp)
 	return
 }
 
