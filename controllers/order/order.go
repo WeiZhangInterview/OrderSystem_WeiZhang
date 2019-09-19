@@ -13,7 +13,7 @@ import (
 func PostOrders(c *gin.Context) {
 	var resultErr model.ResultErr
 	var orderRequest model.OrderRequest
-	errBinding := c.BindWith(&orderRequest, binding.JSON)
+	errBinding := c.ShouldBindWith(&orderRequest, binding.JSON)
 	if errBinding != nil {
 		log.Println(errBinding.Error())
 		resultErr.Error = "ERR_INPUT_COORDINATE"
