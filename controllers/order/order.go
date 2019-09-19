@@ -65,7 +65,7 @@ func PatchOrders(c *gin.Context) {
 	order.Id = orderId
 	effectRow, errTx := order.Update()
 	if errTx != nil || effectRow != 1 {
-		resultErr.Error = "ERR_ORDER_BE_TAKEN"
+		resultErr.Error = "ERR_NO_AVLIABLE_ORDER"
 		c.JSON(409, resultErr)
 		return
 	}
