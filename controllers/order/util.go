@@ -21,7 +21,7 @@ func validateCoordinate(coordinate []string) (err error) {
 		err = errors.New("not valid input")
 		return
 	}
-	if lon > 90 || lon < -90 {
+	if lon > 180 || lon < -180 {
 		err = errors.New("not valid input")
 		return
 	}
