@@ -17,7 +17,7 @@ func validateCoordinate(coordinate []string) (err error) {
 	lon, err = strconv.ParseFloat(coordinate[1], 64)
 
 	//validate input coordiante
-	if err != nil || lat > 180 || lat < -180 {
+	if err != nil || lat > 90 || lat < -90 {
 		err = errors.New("not valid input")
 		return
 	}
